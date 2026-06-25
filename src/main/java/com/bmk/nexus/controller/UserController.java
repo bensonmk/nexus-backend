@@ -4,6 +4,7 @@ import com.bmk.nexus.dto.request.UserRequestDto;
 import com.bmk.nexus.dto.response.UserResponseDto;
 import com.bmk.nexus.entity.User;
 import com.bmk.nexus.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,7 @@ public class UserController {
     }
 
     @PostMapping
-    public UserResponseDto createUser(@RequestBody UserRequestDto user) {
+    public UserResponseDto createUser(@Valid @RequestBody UserRequestDto user) {
 
         User savedUser = userService.createUser(user);
 

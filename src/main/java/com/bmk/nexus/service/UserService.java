@@ -2,6 +2,7 @@ package com.bmk.nexus.service;
 
 import com.bmk.nexus.dto.request.UserRequestDto;
 import com.bmk.nexus.entity.User;
+import com.bmk.nexus.exception.EmailAlreadyExistsException;
 import com.bmk.nexus.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,10 @@ public class UserService {
         user.setName(userRequestDto.getName());
         user.setEmail(userRequestDto.getEmail());
         user.setPassword(userRequestDto.getPassword());
+
+        if (userRepository.existsByEmail(userRequestDto.getEmail())) {
+            throw new EmailAlreadyExistsException("Email already exists");
+        }
 
         return userRepository.save(user);
     }
