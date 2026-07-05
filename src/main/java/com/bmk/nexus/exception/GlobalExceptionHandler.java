@@ -38,4 +38,12 @@ public class GlobalExceptionHandler {
                 .badRequest()
                 .body(new ErrorResponseDto("Validation failed", errors));
     }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleUserNotFound(UserNotFoundException ex) {
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponseDto(ex.getMessage(), null));
+    }
 }
