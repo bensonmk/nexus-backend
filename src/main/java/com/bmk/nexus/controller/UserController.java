@@ -3,6 +3,7 @@ package com.bmk.nexus.controller;
 import com.bmk.nexus.dto.request.UserRequestDto;
 import com.bmk.nexus.dto.response.UserResponseDto;
 import com.bmk.nexus.entity.User;
+import com.bmk.nexus.mapper.UserMapper;
 import com.bmk.nexus.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,16 +16,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
+    private final UserMapper userMapper;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserMapper userMapper) {
         this.userService = userService;
+        this.userMapper = userMapper;
     }
 
     @PostMapping
-    public UserResponseDto createUser(@Valid @RequestBody UserRequestDto user) {
+    public UserResponseDto createUser(@Valid @RequestBody UserRequestDto requestDto) {
 
-        User savedUser = userService.createUser(user);
+        User user = userService.createUser(requestDto);
 
-        return new UserResponseDto(savedUser.getId(), savedUser.getName(), savedUser.getEmail());
+        return userMapper.toResponseDto(user);
     }
 }
