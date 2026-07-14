@@ -46,4 +46,12 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponseDto(ex.getMessage(), null));
     }
+
+    @ExceptionHandler(JobApplicationNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleJobApplicationNotFound(JobApplicationNotFoundException ex) {
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponseDto(ex.getMessage(), null));
+    }
 }
