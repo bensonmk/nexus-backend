@@ -1,5 +1,6 @@
 package com.bmk.nexus.service;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.bmk.nexus.dto.request.LoginRequestDto;
 import com.bmk.nexus.dto.response.LoginResponseDto;
 import com.bmk.nexus.entity.User;
@@ -13,10 +14,12 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     public LoginResponseDto login(LoginRequestDto requestDto) {
@@ -28,6 +31,12 @@ public class AuthService {
             throw new InvalidCredentialsException("Invalid email or password.");
         }
 
-        return new LoginResponseDto("Login successful");
+        String token = jwtService.generateToken(requestDto.getEmail());
+
+        DecodedJWT decodedJWT = jwtService.verifyToken(token);
+
+        System.out.println(decodedJWT.getSubject());
+
+        return new LoginResponseDto(token);
     }
 }
